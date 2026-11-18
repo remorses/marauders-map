@@ -1,0 +1,13 @@
+node_modules
+dist
+tmp
+.icloud
+.env
+.playwriter-eval.js
+# copyrighted film and prop references (Warner Bros, MinaLima): local only
+references/*
+!references/style-guide.md
+video/frames
+video/*.mp4
+video/assets/music
+video/recent-posts.md

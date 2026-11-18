@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>The Marauder's Map</title>
+    <style>
+      @font-face { font-family: 'Marauder Hand'; src: url('/fonts/grenze-gotisch.ttf'); font-weight: 100 900; }
+      @font-face { font-family: 'Marauder Pen'; src: url('/fonts/la-belle-aurore.ttf'); }
+      @font-face { font-family: 'Marauder Name'; src: url('/fonts/im-fell-pica-italic.ttf'); }
+      @font-face { font-family: 'Marauder Title'; src: url('/fonts/im-fell-english-sc.ttf'); }
+      @font-face { font-family: 'Marauder Italic'; src: url('/fonts/im-fell-english-italic.ttf'); }
+      @font-face { font-family: 'Marauder Script'; src: url('/fonts/mrs-saint-delafield.ttf'); }
+      html, body { margin: 0; height: 100%; overflow: hidden; background: #1b120a; }
+      canvas { display: block; touch-action: none; cursor: grab; }
+      canvas:active { cursor: grabbing; }
+
+      #cover {
+        position: fixed; inset: 0; display: grid; place-items: center; cursor: pointer;
+        background:
+          radial-gradient(ellipse at 50% 45%, rgba(232, 211, 164, 0.98) 0%, rgba(201, 165, 106, 0.98) 62%, rgba(90, 62, 28, 1) 100%);
+        color: #2b1a0e; transition: opacity 1.2s ease; text-align: center;
+      }
+      #cover.hidden { opacity: 0; pointer-events: none; }
+      #cover .messrs { font: 28px 'Marauder Italic', serif; line-height: 1.25; }
+      #cover .names { font: 34px 'Marauder Title', serif; letter-spacing: 0.04em; line-height: 1.15; }
+      #cover .present { font: 24px 'Marauder Italic', serif; margin-top: 10px; }
+      #cover .diamond {
+        margin: 34px auto 26px; width: 210px; height: 210px; transform: rotate(45deg);
+        background: #4e1a12; box-shadow: 0 0 0 3px #e8d3a4, 0 0 0 5px #4e1a12;
+        display: grid; place-items: center;
+      }
+      #cover .diamond span { transform: rotate(-45deg); font: 30px 'Marauder Title', serif; color: #e8d3a4; line-height: 1.05; }
+      #cover .diamond small { font: 22px 'Marauder Italic', serif; display: block; }
+      #oath { font: 26px 'Marauder Italic', serif; min-height: 34px; margin-top: 18px; }
+      #cover .hint { font: 15px 'Marauder Italic', serif; opacity: 0.6; margin-top: 8px; }
+
+      #title {
+        position: fixed; top: 22px; left: 50%; transform: translateX(-50%); pointer-events: none;
+        text-align: center; color: #2b1a0e; opacity: 0; transition: opacity 2.5s ease;
+      }
+      #title.shown { opacity: 0.9; }
+      #title .messrs { font: 18px 'Marauder Italic', serif; }
+      #title .names { font: 22px 'Marauder Title', serif; letter-spacing: 0.04em; }
+      #title .present { font: 16px 'Marauder Italic', serif; }
+
+      #people {
+        position: fixed; left: 24px; bottom: 20px; font: 18px 'Marauder Name', serif; color: #2b1a0e;
+        opacity: 0; transition: opacity 2s ease; pointer-events: none; user-select: none; line-height: 1.5;
+      }
+      #people.shown { opacity: 0.8; pointer-events: auto; }
+      #people div { cursor: pointer; }
+      #people div:hover { opacity: 1; text-decoration: underline; text-decoration-thickness: 1px; }
+      #attribution {
+        position: fixed; right: 8px; top: 6px; font: 11px 'Marauder Italic', serif; color: #2b1a0e; opacity: 0.55;
+      }
+      #attribution a { color: inherit; }
+      #mischief {
+        position: fixed; right: 26px; bottom: 22px; font: 19px 'Marauder Italic', serif; color: #2b1a0e;
+        cursor: pointer; opacity: 0; transition: opacity 2s ease; pointer-events: none; user-select: none;
+      }
+      #mischief.shown { opacity: 0.75; pointer-events: auto; }
+      #mischief:hover { opacity: 1; }
+    </style>
+  </head>
+  <body>
+    <div id="cover">
+      <div>
+        <div class="messrs">Messrs</div>
+        <div class="names">Moony, Wormtail,<br />Padfoot &amp; Prongs</div>
+        <div class="messrs">Purveyors of Aids to Magical Mischief-Makers</div>
+        <div class="present">are proud to present</div>
+        <div class="diamond"><span><small>The</small>MARAUDER'S<br />MAP</span></div>
+        <div id="oath"></div>
+        <div class="hint">tap the parchment with your wand</div>
+      </div>
+    </div>
+    <div id="title">
+      <div class="messrs">Messrs</div>
+      <div class="names">Moony, Wormtail, Padfoot &amp; Prongs</div>
+      <div class="present">are proud to present</div>
+    </div>
+    <div id="people"></div>
+    <div id="mischief">Mischief managed</div>
+    <div id="attribution">
+      <a href="https://openfreemap.org" target="_blank">OpenFreeMap</a> © <a href="https://www.openmaptiles.org/" target="_blank">OpenMapTiles</a>
+      Data from <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
