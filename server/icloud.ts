@@ -366,10 +366,7 @@ async function verifyTwoFactor({ session, askCode, signal }: { session: ICloudSe
   const optionsRes = await request({ session, url: AUTH_ENDPOINT, headers: authHeaders(session, { Accept: 'application/json' }), signal })
   if (optionsRes instanceof Error) return optionsRes
   const options = await readJson(optionsRes)
-  const phoneNumbers: { id: number; number: string }[] = (options.trustedPhoneNumbers ?? []).map((p: { id: number; numberWithDialCode?: string; obfuscatedNumber?: string }) => ({
-    id: p.id,
-    number: p.numberWithDialCode ?? p.obfuscatedNumber ?? String(p.id),
-  }))
+  const phoneNumbers = trustedPhones(options)
 
   for (;;) {
     const answer = await askCode({ phoneNumbers })
@@ -414,6 +411,20 @@ async function verifyTwoFactor({ session, askCode, signal }: { session: ICloudSe
   if (trust instanceof Error) return trust
   if (trust.status >= 400) return new ICloudError({ message: 'Apple did not trust this session.', status: trust.status })
   return undefined
+}
+
+type TrustedPhone = { id: number; numberWithDialCode?: string; obfuscatedNumber?: string }
+
+// Apple puts trusted phones in different fields depending on the account and auth flow
+function trustedPhones(options: Record<string, any>) {
+  const raw: TrustedPhone[] = [
+    options.trustedPhoneNumber,
+    options.phoneNumberVerification?.trustedPhoneNumber,
+    ...(options.phoneNumberVerification?.trustedPhoneNumbers ?? []),
+    ...(options.trustedPhoneNumbers ?? []),
+  ].filter((p): p is TrustedPhone => typeof p?.id === 'number')
+  const unique = new Map(raw.map((p) => [p.id, { id: p.id, number: p.numberWithDialCode ?? p.obfuscatedNumber ?? String(p.id) }]))
+  return [...unique.values()]
 }
 
 // Apple sometimes accepts a code with a 409 (body says valid) or a 412 account repair

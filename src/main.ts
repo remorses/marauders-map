@@ -39,6 +39,8 @@ const DEMO_NAMES = params.get('names')?.split(',').map((n) => n.trim()).filter(B
 const capture = params.has('capture')
 // ?ui=2 draws lines, names and footprints twice as big, like a 2x screen (used for video frames)
 const uiScale = Number(params.get('ui') ?? 1)
+// ?layer=mask shows the class mask the ink shader reads: red buildings, green streets, blue water
+const showMask = params.get('layer') === 'mask'
 const hasStartCenter = params.has('lat') && params.has('lon')
 const startCenter = {
   lat: Number(params.get('lat') ?? DEFAULT_CENTER.lat),
@@ -364,6 +366,14 @@ function frame(nowMs: number) {
   renderer.setClearColor(0x000000, 0)
   renderer.clear()
   renderer.render(maskScene, camera)
+  if (showMask) {
+    renderer.setRenderTarget(null)
+    renderer.setClearColor(0x000000, 1)
+    renderer.clear()
+    renderer.render(maskScene, camera)
+    if (!capture) requestAnimationFrame(frame)
+    return
+  }
 
   blur({ from: maskTarget.texture, to: smallTarget, sigma: LINE_BLUR_SIGMA_PX * dpr * uiScale, w, h })
   const wallPx = Math.max(2.5 * dpr * uiScale, (WALL_THICKNESS_M * k) / deviceMpp)

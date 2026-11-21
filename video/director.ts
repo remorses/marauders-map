@@ -18,12 +18,15 @@ const SCENE = {
   bloom: 0,
   glide: 1.1,
   push: 4.6,
-  wide: 8.4,
-  credit: 11.8,
+  latin: 8.6,
+  streets: 12.8,
+  wide: 17,
+  credit: 21,
 }
-const LENGTH_S = 14.4
+const LENGTH_S = 23.6
 
 const FOCUS_NAME = 'Tommy'
+const SECOND_NAME = 'Sofia'
 // ?ui=2: frames are 1920 wide but laid out like a 960 wide screen at 2x
 const UI = Number(new URLSearchParams(location.search).get('ui') ?? 1)
 document.documentElement.style.setProperty('--ui', String(UI))
@@ -60,8 +63,10 @@ document.body.append(caption)
 document.getElementById('cover')!.style.display = 'none'
 
 const CAPTIONS = [
-  { text: 'I recreated the Marauder’s Map', start: SCENE.glide, end: SCENE.push },
-  { text: 'with live locations from Apple Find My', start: SCENE.push, end: SCENE.wide },
+  { text: 'the Marauder’s Map from Harry Potter', start: SCENE.glide, end: SCENE.push },
+  { text: 'with live locations from Apple Find My', start: SCENE.push, end: SCENE.latin },
+  { text: 'every wall is written in tiny Latin', start: SCENE.latin, end: SCENE.streets },
+  { text: 'footsteps follow the real streets', start: SCENE.streets, end: SCENE.wide },
   { text: 'see your family walking, in real time', start: SCENE.wide, end: SCENE.credit },
   { text: 'made by Opus 5.5', start: SCENE.credit, end: LENGTH_S + 1 },
 ]
@@ -84,21 +89,26 @@ function writeOn({ el, text, t, start, endAt }: { el: HTMLElement; text: string;
 let k = 1
 let start = { x: 0, y: 0 }
 
-function focusWalker() {
+function walkerOffset(name: string) {
   const walkers = [...hooks.mapPeople.walkers.values()]
-  return walkers.find((w) => w.name === FOCUS_NAME) ?? walkers[0]
+  const w = walkers.find((w) => w.name === name) ?? walkers[0]
+  return w ? { x: (w.x - start.x) / k, y: (w.y - start.y) / k } : { x: 0, y: 0 }
 }
 
 // camera keys: (time, x, y, meters per css px). x/y are offsets in meters from the start center
 function cameraAt(t: number): View {
-  const w = focusWalker()
-  const follow = w ? { x: (w.x - start.x) / k, y: (w.y - start.y) / k } : { x: 0, y: 0 }
+  const follow = walkerOffset(FOCUS_NAME)
+  const second = walkerOffset(SECOND_NAME)
   const keys = [
     { t: SCENE.bloom, x: 0, y: 0, mpp: 0.36 },
     { t: SCENE.glide + 1.5, x: -40, y: 20, mpp: 0.38 },
     { t: SCENE.push, x: 140, y: 60, mpp: 0.3 },
     { t: SCENE.push + 1.4, x: follow.x, y: follow.y, mpp: 0.13 },
-    { t: SCENE.wide, x: follow.x, y: follow.y, mpp: 0.12 },
+    { t: SCENE.latin, x: follow.x, y: follow.y, mpp: 0.12 },
+    { t: SCENE.latin + 1.6, x: follow.x + 14, y: follow.y + 9, mpp: 0.065 },
+    { t: SCENE.streets, x: follow.x + 16, y: follow.y + 10, mpp: 0.06 },
+    { t: SCENE.streets + 1.8, x: second.x, y: second.y, mpp: 0.11 },
+    { t: SCENE.wide, x: second.x, y: second.y, mpp: 0.1 },
     { t: SCENE.wide + 2.2, x: 60, y: -60, mpp: 1.3 },
     { t: LENGTH_S, x: 90, y: -80, mpp: 1.15 },
   ]

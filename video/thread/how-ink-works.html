@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/skill/claude-style/style.css" />
+    <link rel="stylesheet" href="./parchment.css" />
+    <style>
+      .shot { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; border: var(--stroke) solid var(--border); border-radius: 6px; }
+      .panel .box { margin-top: 12px; }
+      .key { font-family: 'Marauder Italic', serif; font-size: 15px; margin-top: 10px; display: flex; gap: 16px; }
+      .steps { font-family: 'Marauder Italic', serif; font-size: 15.5px; line-height: 1.45; color: var(--ink); }
+    </style>
+  </head>
+  <body>
+    <div class="canvas" id="diagram">
+      <div class="title">How the ink is drawn</div>
+      <div class="subtitle">real streets from OpenStreetMap, redrawn by a shader every frame</div>
+      <div class="flow" style="grid-template-columns: 1fr 190px 1fr; --col-gap: 56px; align-items: center">
+        <div class="panel" id="mask" style="grid-area: 1 / 1">
+          <img class="shot" src="./mask-wide.png" />
+          <div class="key">
+            <span><i class="swatch" style="background: #ff0000"></i>buildings</span>
+            <span><i class="swatch" style="background: #00ff00"></i>streets</span>
+            <span><i class="swatch" style="background: #0000ff"></i>water</span>
+          </div>
+        </div>
+        <div class="box blue" id="shader" style="grid-area: 1 / 2">
+          <div>Ink shader</div>
+          <div class="steps">
+            broad nib pressure<br />
+            wobbly hand<br />
+            lines drawn twice<br />
+            pen lifts<br />
+            folds and stains
+          </div>
+        </div>
+        <div class="panel" id="ink" style="grid-area: 1 / 3">
+          <img class="shot" src="./ink-wide.png" />
+          <div class="key"><span>names, footsteps and wall text on top</span></div>
+        </div>
+      </div>
+    </div>
+    <script type="module">
+      import { connect, track } from '/skill/diagram.ts'
+      track(
+        Promise.all([...document.images].map((img) => img.decode())).then(() => {
+          connect('mask', 'shader', { color: 'accent' })
+          connect('shader', 'ink', { color: 'accent' })
+        }),
+      )
+    </script>
+  </body>
+</html>

@@ -1,0 +1,49 @@
+/* parchment look for the thread infographics, on top of the diagrams-and-charts claude-style */
+@font-face { font-family: 'Marauder Title'; src: url('./fonts/im-fell-english-sc.ttf'); }
+@font-face { font-family: 'Marauder Italic'; src: url('./fonts/im-fell-english-italic.ttf'); }
+@font-face { font-family: 'Marauder Name'; src: url('./fonts/im-fell-pica-italic.ttf'); }
+@font-face { font-family: 'Marauder Pen'; src: url('./fonts/la-belle-aurore.ttf'); }
+
+:root {
+  --bg: #e9d8ae;
+  --card: #f3e6c4;
+  --sunken: #dfca98;
+  --ink: #2b1a0e;
+  --ink-soft: #3d2614;
+  --muted: #4a2f18;
+  --line: #4a2f18;
+  --border: #4a2f18;
+  --divider: #b89a64;
+  --grid: #d6c08c;
+  --accent: #8b1d14;
+  --blue: #3c2a6b;
+  --blue-fill: #e7d9c0;
+  --pink: #8b1d14;
+  --pink-fill: #f0d6c0;
+  --purple: #2f4a6b;
+  --purple-fill: #dde0cc;
+  --green: #3e5a2a;
+  --green-fill: #e2dfb4;
+  --amber: #7a4a12;
+  --amber-fill: #ecd29c;
+  --sans: 'Marauder Name', serif;
+  --mono: 'Marauder Italic', serif;
+  --stroke: 1.6px;
+}
+
+.canvas {
+  background:
+    radial-gradient(ellipse at 20% 15%, rgba(255, 246, 220, 0.55), transparent 55%),
+    radial-gradient(ellipse at 85% 90%, rgba(150, 105, 50, 0.22), transparent 60%),
+    radial-gradient(ellipse at 70% 30%, rgba(160, 120, 60, 0.12), transparent 40%),
+    var(--bg);
+}
+.box { font-size: 17px; font-weight: 400; color: var(--ink); }
+.box .sub { font-family: 'Marauder Italic', serif; font-size: 14.5px; color: var(--muted); }
+.title {
+  font-family: 'Marauder Title', serif; font-size: 34px; color: var(--ink); letter-spacing: 0.02em;
+  text-align: center; margin-bottom: 4px;
+}
+.subtitle { font-family: 'Marauder Italic', serif; font-size: 18px; text-align: center; margin-bottom: 30px; }
+.pen { font-family: 'Marauder Pen', cursive; font-size: 19px; color: var(--accent); }
+.swatch { display: inline-block; width: 12px; height: 12px; border: 1.2px solid var(--ink); margin-right: 6px; vertical-align: -1px; }
